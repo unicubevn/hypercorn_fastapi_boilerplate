@@ -6,13 +6,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
 from hypercorn import logging
 from hypercorn.config import Config
-from doc_metadata import tags_metadata,servers_metadata
-from router.api import router as ipn_router
+from server.doc_metadata import tags_metadata,servers_metadata
+from routers.api import router as api_router
+from routers.auth import router as auth_router
 
 _logger = logging.Logger(Config())
 origins = [
     "http://localhost",
     "http://localhost:8080",
+    "http://127.0.0.1:8000"
 ]
 
 # Meta for docs
@@ -30,7 +32,7 @@ You will be able to:
 * **Create users** (_not implemented_).
 * **Read users** (_not implemented_).
 """
-env = dotenv_values(".env")
+env = dotenv_values("./configs/dev_config.toml")
 app = FastAPI(
     debug=env["ENVIRONMENT"] == "dev",
     default_response_class=ORJSONResponse,
@@ -63,15 +65,13 @@ app.add_middleware(
 
 
 # Include api path
-# app.include_router(StudentRouter, tags=["Student"], prefix="/students")
-# app.include_router(ipn_router, tags=["IPN"], prefix="/ipn")
+app.include_router(auth_router, tags=["Auth"], prefix="/auth")
+app.include_router(api_router, tags=["Api"], prefix="/api")
 
-@app.get("/")
+@app.get("/",tags=["Api"])
 async def read_root():
     await _logger.debug("hello world")
-    return {"msg": "Hello World"}
+    return {"msg": "Hello World. This is UniCube Open Api"}
 
 
-@app.get("{item_id}")
-async def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+

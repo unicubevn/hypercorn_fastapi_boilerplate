@@ -1,19 +1,19 @@
 servers_metadata=[
-        {"url": "https://stag.example.com", "description": "Staging environment"},
-        {"url": "https://prod.example.com", "description": "Production environment"},
+        {"url": "http://localhost:8000", "description": "Staging environment"},
+        {"url": "https://prod.unicube.vn", "description": "Production environment"},
     ]
 
 tags_metadata = [
     {
-        "name": "users",
+        "name": "Auth",
         "description": "Operations with users. The **login** logic is also here.",
     },
     {
-        "name": "items",
-        "description": "Manage items. So _fancy_ they have their own docs.",
+        "name": "Api",
+        "description": "Open API Gateway service API",
         "externalDocs": {
             "description": "Items external docs",
-            "url": "https://fastapi.tiangolo.com/",
+            "url": "https://unicube.vn",
         },
     },
 ]

@@ -1,1 +1,1 @@
- hypercorn server.app:app --config .\config\dev_config.toml
+ hypercorn server.main:app --config .\configs\dev_config.toml

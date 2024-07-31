@@ -62,4 +62,4 @@ hypercorn.logging._create_logger = _create_logger
 
 # ====================================================
 log_config = Config()
-_logger = hypercorn.logging.Logger(log_config)
+logger = hypercorn.logging.Logger(log_config)

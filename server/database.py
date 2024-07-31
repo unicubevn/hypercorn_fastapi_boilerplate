@@ -8,8 +8,8 @@ PyObjectId = Annotated[str, BeforeValidator(str)]
 
 config = dotenv_values(".env")
 print(config)
-client = motor.motor_asyncio.AsyncIOMotorClient(config["DB_URL"])
-db = client.get_database(config["MONGO_DB"])
+# client = motor.motor_asyncio.AsyncIOMotorClient(config["DB_URL"])
+# db = client.get_database(config["MONGO_DB"])
 # student_collection = db.get_collection("students")
 # ipn_collection = db.get_collection("ipn")
 # ipn_url_collection = db.get_collection("ipn_url")
