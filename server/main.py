@@ -2,11 +2,14 @@ from typing import Union
 
 from dotenv import dotenv_values
 from fastapi import FastAPI
+from fastapi.datastructures import Default
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
 from hypercorn import logging
 from hypercorn.config import Config
-from server.doc_metadata import tags_metadata,servers_metadata
+
+from models.api import UniCubeBaseResponse, ErrorResponse
+from server.doc_metadata import tags_metadata, servers_metadata
 from routers.api import router as api_router
 from routers.auth import router as auth_router
 
@@ -35,7 +38,7 @@ You will be able to:
 env = dotenv_values("./configs/dev_config.toml")
 app = FastAPI(
     debug=env["ENVIRONMENT"] == "dev",
-    default_response_class=ORJSONResponse,
+    default_response_class=Default(ORJSONResponse),
     title="UniCube Apis",
     description=description,
     openapi_url="/api/v1/openapi.json",
@@ -53,6 +56,11 @@ app = FastAPI(
         "name": "Apache 2.0",
         "identifier": "MIT",
     },
+    responses={
+        200: { "description": "Successful Response"},
+        400: {"model": ErrorResponse, "description": "Invalid Item ID"},
+        404: {"model": ErrorResponse, "description": "Item not found"}
+    }
 )
 
 app.add_middleware(
@@ -63,15 +71,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 # Include api path
 app.include_router(auth_router, tags=["Auth"], prefix="/auth")
 app.include_router(api_router, tags=["Api"], prefix="/api")
 
-@app.get("/",tags=["Api"])
+
+@app.get("/", tags=["Api"])
 async def read_root():
     await _logger.debug("hello world")
     return {"msg": "Hello World. This is UniCube Open Api"}
-
-
-
