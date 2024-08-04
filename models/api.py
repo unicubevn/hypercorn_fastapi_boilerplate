@@ -36,10 +36,13 @@ class TraceInfoBase(TraceBase):
 
 class UniCubeBaseResponse(BaseModel):
     trace: Optional[TraceInfoBase] = None
-    data: Optional[List[object]] = []
+    data: List[object] | object | None = []
     meta: Optional[MetaData | ErrorData] = None
+
+
 class ErrorResponse(BaseModel):
     detail: str
+
 
 class ListBase(BaseModel):
     meta: Optional[MetaData | ErrorData]
